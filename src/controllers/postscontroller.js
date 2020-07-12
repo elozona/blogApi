@@ -2,19 +2,33 @@ const Post = require('../models/post');
 
 // Get all posts
 exports.getAllPosts = async (req, res) => {
-    await posts.find();
-    return res.json({ posts });
+   const posts = await Post.find({});
+   if(!posts.length){
+    return res
+    .status(404)
+    .json({ success: false, message: "you have no blog at the moment" });
+}
+    return res.status(200).json({ posts });
 };
 
 // Get a post
 exports.getOnePost = async (req, res) => {
     try {
         const post = await Post.findOne({ _id: req.params.id });
-        return res.send(post);
+        if(!post){
+            return res
+            .status(404)
+            .json({ success: false, message: "Blog not found" });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "successfully retrieved a blog post",
+            post,
+        });
     } catch {
         return res
             .status(500)
-            .json({ error: "An error occured" });
+            .json({ success: false, message: "An error occured" });
       }
   };
 
@@ -29,18 +43,17 @@ exports.getOnePost = async (req, res) => {
             updatedAt: new Date(),
             author,
         };
-        const postData = new Post(post);
-
-        postData.save(function(err) {
-            if (err) throw err;
-            console.log('==========================');
-            return res.end('Author successfully saved.');
+        const createdPost = await Post.create(post);
+        return res.status(201).json({
+            success: true,
+            message: 'Post successfully saved.',
+            createdPost
         });
-        // const newPost = Post(post);
-        // const createdPost = await newPost.create((err, data) => console.log("============================", data))
-        // return res.status(201).json({ createdPost });
+  
      } catch (error) {
          console.log(error);
          return res.status(201).json({ error });
      }
   };
+
+

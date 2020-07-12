@@ -4,9 +4,9 @@ const commentSchema = new mongoose.Schema({
     comment: String,
     createdAt: Date,
     updatedAt: Date,
-    author: String,
-    views: Number,
-    likes: Number,
+    userId: String,
+    postId: String,
+    userId: String,
 });
 
 const Comment = mongoose.model('Comment', commentSchema);

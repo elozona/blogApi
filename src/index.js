@@ -1,46 +1,31 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const routes = require('./routes');
-const bodyParser = require('body-parser');
+const routes = require('./routes/postsroutes');
 const mongoose = require('mongoose');
-
-dotenv.config();
+const App = require('./routes/index');
 const app = express();
 
-// Body Parser
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+dotenv.config();
 
 // Set up default mongoose connection
-/*mongoose.connect('mongodb://localhost:27017/blogs', { useNewUrlParser: true, useUnifiedTopology: true, }); 
-
-const db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'Connection Error:'));
- db.once('open', () => {
-  console.log("Successfully connected to MongoDB!");
-});*/
-
-const dbConnection = mongoose.createConnection(process.env.MONGO_URL, 
+mongoose.connect(process.env.MONGO_URL, 
     { 
       useNewUrlParser: true,
       useFindAndModify: true,
       useCreateIndex: true,
       useUnifiedTopology: true 
     }); 
-dbConnection.on('open', () => {
-    console.log( "Connected to MongoDB successfully...!" )
-});
-dbConnection.on('error', () => {
+
+mongoose.connection.on('error', () => {
     console.error("Couldn't connect to MongoDB.")
 });
-dbConnection.on('disconnected', () => {
+mongoose.connection.on('disconnected', () => {
     console.error("Connection is lost")
 }); 
 // .then(() => console.log( "Connected to MongoDB successfully...!" ) )
 //     .catch((error) => console.error("Couldn't connect to MongoDB.") );
 
-app.use('/api/', routes);
+app.use('/api/blog', routes);
 
 app.use('*', (req, res) => {
     res.status(404).json({
@@ -48,6 +33,10 @@ app.use('*', (req, res) => {
     })
 });
 
-// Asssign a dynamic port with an environment variable PORT
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Server now listening on port ${port}...`));
+// Asssign a dynamic port with an environment variable PORT to run when database runs
+mongoose.connection.on('open', () => {
+    console.log( "Connected to MongoDB successfully...!" );
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => console.log(`Server now listening on port ${port}...`));
+
+});

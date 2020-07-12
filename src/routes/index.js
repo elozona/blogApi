@@ -1,29 +1,16 @@
 const express = require("express");
-const postcontroller = require('../controllers/postscontroller');
+const bodyParser = require('body-parser');
+const userView = require('./usersroutes');
+const postView = require('./postsroutes');
+const app = express();
 
-const router = express.Router();
+// Body Parser
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use('/users', userView.userRouter);
 
-const {
-    createNewPost
-} = postcontroller;
-
-router.post('/post', createNewPost);
-
-// // View all courses
-// router.get('/courses', view_all_courses);
-
-// // Get a course
-// router.get('/courses/:id', get_one_course);
-
-// // Create a course
-// router.post('/courses', create_course);
-
-// // Update a course
-// router.put('/courses/:id', update_course);
+app.use('/posts', postView.postRouter);
 
 
-// // Delete course request
-// router.delete('/courses/:id', delete_course);
-
-module.exports = router;
+module.exports = ;
