@@ -1,8 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const routes = require('./routes/postsroutes');
+// const routes = require('./routes/postsroutes');
 const mongoose = require('mongoose');
-const App = require('./routes/index');
+const routes = require('./routes/index');
 const app = express();
 
 dotenv.config();

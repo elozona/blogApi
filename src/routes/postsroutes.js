@@ -1,5 +1,5 @@
 const express = require("express");
-const postcontroller = require('../controllers/postscontroller');
+const postController = require('../controllers/postsController');
 const { check } = require('express-validator');
 const validator = require("../middlewares/validator");
 
@@ -10,10 +10,13 @@ const {
     createNewPost,
     getAllPosts,
     getOnePost,
-} = postcontroller;
+    updatePost,
+    deletePost
+} = postController;
 
+// Create a post
 router.post(
-    '/post',
+    '/',
     [
         check('title', "Title is required ").notEmpty(),
         check('author', "Author must exist").notEmpty(),
@@ -24,25 +27,24 @@ router.post(
   createNewPost
   );
 
-// // View all courses
+// // View all posts
 router.get('/', getAllPosts);
 
-// // Get a course
-router.get('/post/:id',
+// // Get a post
+router.get('/:id',
 [
     check('id', "Post ID is required ").notEmpty()
 ],
 validator,
 getOnePost);
 
-// // Create a course
-// router.post('/courses', create_course);
-
-// // Update a course
-// router.put('/courses/:id', update_course);
+// Update a post
+router.patch('/:id', updatePost);
 
 
-// // Delete course request
-// router.delete('/courses/:id', delete_course);
+// Delete post request
+router.delete('/:id', deletePost);
 
-exports.postRouter = router;
+
+
+module.exports = router;

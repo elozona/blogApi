@@ -7,6 +7,7 @@ const validator = (req, res, next) => {
       return res.status(422).json({ errors: errors.array() });
     }
    return next();
-}
+};
+
 
 module.exports = validator;

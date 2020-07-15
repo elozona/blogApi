@@ -1,16 +1,17 @@
 const express = require("express");
 const bodyParser = require('body-parser');
-const userView = require('./usersroutes');
-const postView = require('./postsroutes');
+const userRouter = require('./usersRoutes');
+const postRouter = require('./postsRoutes');
+//const { Router } = require("express");
 const app = express();
 
 // Body Parser
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/users', userView.userRouter);
+app.use('/users', userRouter);
 
-app.use('/posts', postView.postRouter);
+app.use('/posts', postRouter);
 
 
-module.exports = ;
+module.exports = app;

@@ -6,7 +6,6 @@ const postSchema = new mongoose.Schema({
     createdAt: Date,
     updatedAt: Date,
     author: String,
-    userId: String,
 });
 
 const Post = mongoose.model('Post', postSchema);
